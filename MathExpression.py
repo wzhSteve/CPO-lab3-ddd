@@ -77,10 +77,7 @@ class expression(object):
                         num = re.findall(r"[-]\d+\.?\d*|\d+\.?\d*", ele)
                         t = value.index(ele)
                         parameter = [float(i) for i in num]
-                        try:
-                            value[t] = str(self.__func_dic[temp](parameter))
-                        except:
-                            logging.error('Incorrect number of function parameters')
+                        value[t] = str(self.__func_dic[temp](parameter))
                         break
         return value
 
@@ -125,7 +122,8 @@ def direct_cal(infix):
                 y = opStack.pop()
         elif x in "*/+-":
             p = cal_class[x]
-            while(not opStack.isEmpty())and(cal_class[opStack.peek()]>=p):
+            q = cal_class[opStack.peek()]
+            while(not opStack.isEmpty()) and (q >= p):
                 b = numStack.pop()
                 a = numStack.pop()
                 y = opStack.pop()
