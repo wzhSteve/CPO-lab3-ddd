@@ -122,8 +122,8 @@ def direct_cal(infix):
                 y = opStack.pop()
         elif x in "*/+-":
             p = cal_class[x]
-            q = cal_class[opStack.peek()]
-            while(not opStack.isEmpty()) and (q >= p):
+            q = opStack.peek()
+            while (not opStack.isEmpty()) and (cal_class[q] >= p):
                 b = numStack.pop()
                 a = numStack.pop()
                 y = opStack.pop()
