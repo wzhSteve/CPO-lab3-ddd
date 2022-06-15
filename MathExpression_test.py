@@ -1,6 +1,6 @@
 import unittest
 from math import sin
-from hypothesis import given, strategies
+# from hypothesis import given, strategies
 from MathExpression import expression, direct_cal
 
 
