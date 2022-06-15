@@ -9,7 +9,7 @@ class TestMathExpression(unittest.TestCase):
         # test1
         str="a + 2 - sin(-0.3)*(b - c)"
         func_dic={"sin": lambda a: sin(a[0])}
-        test1 = expression(str=str, func_dic=func_dict, a=2, b=1, c=3)
+        test1 = expression(str=str, func_dic=func_dic, a=2, b=1, c=3)
         value1 = test1.process()
         out1 = direct_cal(value1)
         self.assertEqual(2 + 2 - sin(-0.3)*(1 - 3), out1)
