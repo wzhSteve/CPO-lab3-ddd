@@ -1,9 +1,11 @@
-import re, logging
+import re
+import logging
 from math import sin
 
 
 class expression(object):
-    def __init__(self, str="a + 2 - sin(-0.3)*(b - c)", func_dic={"sin":lambda a: sin(a[0])}, **parameter):
+    
+    def __init__(self, str, func_dic, **parameter):
         self.__str = str
         self.__func_dic = func_dic
         self.__parameter = parameter
@@ -71,11 +73,12 @@ class expression(object):
             if re.match(r'[a-zA-Z]', ele) != None:
                 for i in range(len(ele)):
                     if re.match(r'[a-zA-Z]', ele[i]) == None:
-                        temp = ele[:i] #get function name
+                        temp = ele[:i]
                         num = re.findall(r"[-]\d+\.?\d*|\d+\.?\d*", ele)
                         t = value.index(ele)
                         try:
-                            value[t] = str(self.__func_dic[temp]([float(i) for i in num]))
+                            value[t] = str(self.__func_dic[temp]\
+                                           ([float(i) for i in num]))
                         except:
                             logging.error('Incorrect number of function parameters')
                         break
@@ -102,6 +105,7 @@ class Stack:
     def size(self):
         return len(self.items)
 
+
 def direct_cal(infix):
     cal_class = {"*": 3, "/": 3, "+": 2, "-": 2, "(": 1}
     list = infix
@@ -120,7 +124,8 @@ def direct_cal(infix):
                 numStack.push(simple_cal(a, b, y))
                 y = opStack.pop()
         elif x in "*/+-":
-            while (not opStack.isEmpty()) and (cal_class[opStack.peek()] >= cal_class[x]):
+            while (not opStack.isEmpty()) and (cal_class[opStack.peek()]\
+                                               >= cal_class[x]):
                 b = numStack.pop()
                 a = numStack.pop()
                 y = opStack.pop()
@@ -133,13 +138,14 @@ def direct_cal(infix):
         numStack.push(simple_cal(a, b, y))
     return numStack.pop()
 
+
 def simple_cal(a, b, x):  # 简单的四则运算
     if x == "*":
         return a * b
     elif x == "/":
         try:
             return a / b
-        except:
+        except ZeroDivisionError:
             logging.error("Divide the error by 0")
     elif x == "+":
         return a + b
