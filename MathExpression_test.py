@@ -41,12 +41,4 @@ class TestMathExpression(unittest.TestCase):
         value5 = test5.process()
         out5 = direct_cal(value5)
         self.assertEqual(2 + 2 - (sin(1)*3 * (4 - 8)) * (1 - 3), out5)
-        # test6
-        str = "sin(a) + 2 - f(b,c,d,e)*(b - c)"
-        f1 = lambda a : sin(a[0])
-        f2 = lambda a : sin(a[0])*a[1]*(a[2]-a[3])
-        func_dic = {"sin" : f1, "f" : f2}
-        test6 = expression(str=str, func_dic=func_dic, a=2, b=1, c=3, d=4, e=8)
-        value6 = test6.process()
-        out6 = direct_cal(value6)
-        self.assertEqual(sin(2) + 2 - (sin(1) * 3 * (4 - 8)) * (1 - 3), out6)
+        
