@@ -1,6 +1,5 @@
 import re
 import logging
-from math import sin
 
 
 class expression(object):
