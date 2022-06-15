@@ -4,7 +4,7 @@ from math import sin
 
 
 class expression(object):
-    
+
     def __init__(self, str, func_dic, **parameter):
         self.__str = str
         self.__func_dic = func_dic
@@ -37,9 +37,9 @@ class expression(object):
                         str_list.append(self.__str[i:j])
                         i = j - 1
                         break
-            if re.match(r'[a-zA-Z]', self.__str[i]) != None:
+            if re.match(r'[a-zA-Z]', self.__str[i]) is not None:
                 for j in range(i + 1, len(self.__str)):
-                    if re.match(r'[a-zA-Z]', self.__str[j]) == None:
+                    if re.match(r'[a-zA-Z]', self.__str[j]) is None:
                         if self.__str[j] == '(':
                             for k in range(j + 1, len(self.__str)):
                                 if self.__str[k] == ')':
@@ -70,15 +70,15 @@ class expression(object):
         value = [self.value_replace(i) for i in str_list]
         temp = None
         for ele in value:
-            if re.match(r'[a-zA-Z]', ele) != None:
+            if re.match(r'[a-zA-Z]', ele) is not None:
                 for i in range(len(ele)):
-                    if re.match(r'[a-zA-Z]', ele[i]) == None:
+                    if re.match(r'[a-zA-Z]', ele[i]) is None:
                         temp = ele[:i]
                         num = re.findall(r"[-]\d+\.?\d*|\d+\.?\d*", ele)
                         t = value.index(ele)
+                        parameter = [float(i) for i in num]
                         try:
-                            value[t] = str(self.__func_dic[temp]\
-                                           ([float(i) for i in num]))
+                            value[t] = str(self.__func_dic[temp](parameter))
                         except:
                             logging.error('Incorrect number of function parameters')
                         break
@@ -112,7 +112,7 @@ def direct_cal(infix):
     numStack = Stack()
     opStack = Stack()
     for x in list:
-        if re.match(r"[-]\d+\.?\d*|\d+\.?\d*", x) != None:
+        if re.match(r"[-]\d+\.?\d*|\d+\.?\d*", x) is not None:
             numStack.push(float(x))
         elif x == "(":
             opStack.push(x)
@@ -124,8 +124,9 @@ def direct_cal(infix):
                 numStack.push(simple_cal(a, b, y))
                 y = opStack.pop()
         elif x in "*/+-":
-            while (not opStack.isEmpty()) and (cal_class[opStack.peek()]\
-                                               >= cal_class[x]):
+            flag1 = opStack.isEmpty()
+            flag2 = cal_class[opStack.peek()] >= cal_class[x]
+            while (not flag1) and (flag2):
                 b = numStack.pop()
                 a = numStack.pop()
                 y = opStack.pop()
@@ -139,14 +140,11 @@ def direct_cal(infix):
     return numStack.pop()
 
 
-def simple_cal(a, b, x):  # 简单的四则运算
+def simple_cal(a, b, x):
     if x == "*":
         return a * b
     elif x == "/":
-        try:
-            return a / b
-        except ZeroDivisionError:
-            logging.error("Divide the error by 0")
+        return a / b
     elif x == "+":
         return a + b
     elif x == "-":
