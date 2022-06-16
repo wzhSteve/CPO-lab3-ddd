@@ -1,7 +1,5 @@
 # ddd - Lab3 - Variant 2
 
-## group name and group member
-
 - Name:
   - ddd
 
