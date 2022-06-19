@@ -11,8 +11,14 @@
     - id: 212320005
     - email: 15029930122@163.com
 
-In lab 2, *Immutable Algorithms and Data Structure Implementation*, our
-variant 2 aims to implement dynamic array using Python.
+## Variant Description
+- Mathematical expression by string substitution
+  - Find in input string simple expressions `(a, 1+2, f(1))`, and replate it by its result.
+  - Input language is a sting like `a + 2 - sin(-0.3)*(b - c)`.
+  - Should support user-specific functions by passing something like `{"foo": lambda x: x*42}` or by named arguments.
+  - Run-time error should be processed correctly with detail error message.
+  - You should use the default Python logging module to make the interpreter work transparent.
+
 
 ## Project structure
 
