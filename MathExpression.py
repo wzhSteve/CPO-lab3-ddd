@@ -2,6 +2,9 @@ import re
 import logging
 
 
+raw = r"\d+\.?\d*[e][-|+]\d+\.?\d*|[-]\d+\.?\d*[e][-|+]\d+\.?\d*|[-]\d+\.?\d*|\d+\.?\d*|inf"
+
+
 def types(argType):
     def check(func):
         def f(*args, **kwargs):
@@ -98,8 +101,7 @@ class expression(object):
                 for i in range(len(ele)):
                     if re.match(r'[a-zA-Z]', ele[i]) is None:
                         temp = ele[:i]
-                        num = re.findall(
-                            r"\d+\.?\d*[e][-|+]\d+\.?\d*|[-]\d+\.?\d*[e][-|+]\d+\.?\d*|[-]\d+\.?\d*|\d+\.?\d*|inf", ele)
+                        num = re.findall(raw, ele)
                         t = value.index(ele)
                         parameter = tuple([float(i) for i in num])
                         value[t] = str(self.__func_dic(*parameter))
@@ -135,8 +137,7 @@ def direct_cal(infix):
     numStack = Stack()
     opStack = Stack()
     for x in list:
-        if re.match(r"\d+\.?\d*[e][-|+]\d+\.?\d*|[-]\d+\.?\d*[e][-|+]\d+\.?\d*|[-]\d+\.?\d*|\d+\.?\d*|inf",
-                    x) is not None:
+        if re.match(raw, x) is not None:
             numStack.push(float(x))
         elif x == "(":
             opStack.push(x)
