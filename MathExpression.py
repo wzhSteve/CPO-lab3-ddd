@@ -95,7 +95,6 @@ class expression(object):
     def process(self):
         str_list = self.str_tolist()
         value = [self.value_replace(i) for i in str_list]
-        temp = None
         for ele in value:
             if re.match(r'[a-zA-Z]', ele) is not None:
                 for i in range(len(ele)):
