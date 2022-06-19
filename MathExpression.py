@@ -2,7 +2,7 @@ import re
 import logging
 
 
-raw = r"\d+\.?\d*[e][-|+]\d+\.?\d*|[-]\d+\.?\d*[e][-|+]\d+\.?\d*|[-]\d+\.?\d*|\d+\.?\d*|inf"
+raw = r"-*\d+\.?\d*[e][-|+]\d+\.?\d*|-*\d+\.?\d*|inf"
 
 
 def types(argType):
