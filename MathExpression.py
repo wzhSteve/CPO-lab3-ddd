@@ -2,8 +2,32 @@ import re
 import logging
 
 
+def types(argType):
+    def check(func):
+        def f(*args, **kwargs):
+            length = len(args)
+            for k, v in argType.items():
+                if k < length:
+                    p = args[k]
+                    if not isinstance(p, v):
+                        logging.error("The arg %s should be %s,"
+                                      "but it's %s now!"
+                                      % (str(p), type(v()), type(p)))
+                else:
+                    if isinstance(kwargs, v):
+                        pass
+            try:
+                res = func(*args, **kwargs)
+            finally:
+                logging.info("{} FINISH".format(func.__name__))
+            return res
+        return f
+    return check
+
+
 class expression(object):
 
+    @types({1: str, 2: str, 3: dict})
     def __init__(self, str, func_dic, **parameter):
         self.__str = str
         self.__func_dic = func_dic
@@ -30,7 +54,7 @@ class expression(object):
                 continue
             if self.__str[i] in operate:
                 str_list.append(self.__str[i])
-            if self.__str[i] in num:
+            if self.__str[i] in num or self.__str[i] == 'inf':
                 for j in range(i + 1, len(self.__str)):
                     if self.__str[j] not in num:
                         str_list.append(self.__str[i:j])
@@ -52,6 +76,7 @@ class expression(object):
             i = i + 1
         return str_list
 
+    @types({1: str})
     def value_replace(self, input):
         value = []
         for i in range(len(input)):
@@ -73,10 +98,11 @@ class expression(object):
                 for i in range(len(ele)):
                     if re.match(r'[a-zA-Z]', ele[i]) is None:
                         temp = ele[:i]
-                        num = re.findall(r"[-]\d+\.?\d*|\d+\.?\d*", ele)
+                        num = re.findall(
+                            r"\d+\.?\d*[e][-|+]\d+\.?\d*|[-]\d+\.?\d*[e][-|+]\d+\.?\d*|[-]\d+\.?\d*|\d+\.?\d*|inf", ele)
                         t = value.index(ele)
-                        parameter = [float(i) for i in num]
-                        value[t] = str(self.__func_dic[temp](parameter))
+                        parameter = tuple([float(i) for i in num])
+                        value[t] = str(self.__func_dic(*parameter))
                         break
         return value
 
@@ -102,13 +128,15 @@ class Stack:
         return len(self.items)
 
 
+@types({1: str})
 def direct_cal(infix):
     cal_class = {"*": 3, "/": 3, "+": 2, "-": 2, "(": 1}
     list = infix
     numStack = Stack()
     opStack = Stack()
     for x in list:
-        if re.match(r"[-]\d+\.?\d*|\d+\.?\d*", x) is not None:
+        if re.match(r"\d+\.?\d*[e][-|+]\d+\.?\d*|[-]\d+\.?\d*[e][-|+]\d+\.?\d*|[-]\d+\.?\d*|\d+\.?\d*|inf",
+                    x) is not None:
             numStack.push(float(x))
         elif x == "(":
             opStack.push(x)
@@ -136,6 +164,7 @@ def direct_cal(infix):
     return numStack.pop()
 
 
+@types({1: float, 2: str, 3: str})
 def simple_cal(a, b, x):
     if x == "*":
         return a * b
