@@ -100,7 +100,6 @@ class expression(object):
             if re.match(r'[a-zA-Z]', ele) is not None:
                 for i in range(len(ele)):
                     if re.match(r'[a-zA-Z]', ele[i]) is None:
-                        temp = ele[:i]
                         num = re.findall(raw, ele)
                         t = value.index(ele)
                         parameter = tuple([float(i) for i in num])
